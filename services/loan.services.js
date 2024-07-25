@@ -44,4 +44,8 @@ async function closeLoan( borrower, amount, interestRate, duration) {
     }
 }
 
-updateLoan( '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92245', 6, 6, 9);
+module.exports = {
+    createLoan,
+    updateLoan,
+    closeLoan
+}
