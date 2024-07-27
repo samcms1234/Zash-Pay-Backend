@@ -1,5 +1,5 @@
 const express = require('express');
-const User = require('../models/user.models');
+const UserList = require('../models/user.models');
 
 const userRouter = express.Router();
 const { connectMongoDb } = require('../connection');
@@ -10,18 +10,23 @@ const MONGODB_URI = process.env.MONGODB_URI;
 connectMongoDb(MONGODB_URI).then(() => console.log("MongoDB connect"));
 
 userRouter.post('/', async (req, res) => {
-    const { name, email, date, walletAddress } = req.body;
+    const { username, firstName, lastName, email, country, aadharNumber, walletAddress, password } = req.body;
     try {
-        const newUser = new User({
-            name: name,
-            email: email,
-            date: date,
-            walletAddress: walletAddress
+        const newUser = new UserList({
+            username,
+            firstName,
+            lastName,
+            email,
+            country,
+            aadharNumber,
+            walletAddress,
+            password
         })
 
         await newUser.save();
-        res.status(201).send(`The user ${newUser.name} added`);
+        res.status(201).send(`The user ${newUser.username} added`);
     } catch(error) {
+        console.log(error.message);
         res.status(500).send(`The user not added`);
     }
 });
