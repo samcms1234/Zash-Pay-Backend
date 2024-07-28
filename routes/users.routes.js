@@ -4,23 +4,29 @@ const UserList = require('../models/user.models');
 const userRouter = express.Router();
 const { connectMongoDb } = require('../connection');
 
+const bcrypt = require('bcryptjs');
+
 require('dotenv').config();
 const MONGODB_URI = process.env.MONGODB_URI;
 
 connectMongoDb(MONGODB_URI).then(() => console.log("MongoDB connect"));
 
-userRouter.post('/', async (req, res) => {
+userRouter.post('/register', async (req, res) => {
     const { username, firstName, lastName, email, country, aadharNumber, walletAddress, password } = req.body;
+
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     try {
         const newUser = new UserList({
-            username,
-            firstName,
-            lastName,
-            email,
-            country,
-            aadharNumber,
-            walletAddress,
-            password
+            username: username,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            country: country,
+            aadharNumber: aadharNumber,
+            walletAddress: walletAddress,
+            password: hashedPassword
         })
 
         await newUser.save();
@@ -34,9 +40,9 @@ userRouter.post('/', async (req, res) => {
 userRouter.get('/:id', async (req, res) => {
 
     try {
-        const user = await User.findById(req.params.id);
+        const user = await UserList.findById(req.params.id);
         if(!user) return res.status(404).send('User not found');
-        res.status(200).json(`User ${user.name} found`);
+        res.status(200).json(user);
     } catch(error) {
         console.log(error);
         res.status(500).send("Error: error fetching details");
@@ -47,7 +53,7 @@ userRouter.patch('/:id', async (req, res) => {
     
     try {
         const updates = req.body;
-        const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
+        const user = await UserList.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
 
         if(!user) res.send(`User not found`);
         res.send(`User ${user.name} Updated`);

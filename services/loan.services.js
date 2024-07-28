@@ -34,7 +34,7 @@ async function updateLoan( borrower, amount, interestRate, duration) {
     }
 }
 
-async function closeLoan( borrower, amount, interestRate, duration) {
+async function closeLoan( borrower ) {
 
     try {
         await masterControl.methods.closeLoan(borrower).send({ from: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266', gas: 5000000 });
@@ -44,7 +44,19 @@ async function closeLoan( borrower, amount, interestRate, duration) {
     }
 }
 
+async function fetchLoan(borrower) {
+    try {
+        const loan = await masterControl.methods.fetchLoan(borrower).call();
+        logWithTimestamp(`Loan for borrower: ${borrower} has interest rate: ${loan.interestRate}`);
+        return loan;
+    } catch (error) {
+        logWithTimestamp(`Error fetching loan for borrower ${borrower}: ${error.message}`);
+        throw error;
+    }
+}
+
 module.exports = {
+    fetchLoan,
     createLoan,
     updateLoan,
     closeLoan
