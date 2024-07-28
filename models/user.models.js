@@ -17,7 +17,8 @@ const userSchema = new mongoose.Schema({
     aadharNumber: { type: String, required: true, unique: true, validate: integerValidator },
     walletAddress: { type: String, required: true, unique: true, validate: walletAddressValidator },
     date: { type: Date, default: Date.now},
-    password: { type: String, required: true, unique: true }
+    password: { type: String, required: true, unique: true },
+    role: { type: String, enum: ['user', 'admin'], default: 'user' }
 
 });
 

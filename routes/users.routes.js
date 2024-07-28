@@ -12,7 +12,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 connectMongoDb(MONGODB_URI).then(() => console.log("MongoDB connect"));
 
 userRouter.post('/register', async (req, res) => {
-    const { username, firstName, lastName, email, country, aadharNumber, walletAddress, password } = req.body;
+    const { username, firstName, lastName, email, country, aadharNumber, walletAddress, password, role } = req.body;
 
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -26,7 +26,8 @@ userRouter.post('/register', async (req, res) => {
             country: country,
             aadharNumber: aadharNumber,
             walletAddress: walletAddress,
-            password: hashedPassword
+            password: hashedPassword,
+            role: role
         })
 
         await newUser.save();
