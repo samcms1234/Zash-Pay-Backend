@@ -119,4 +119,8 @@ contract MasterControl {
     function closeLoan(address borrower) public onlyOwner {
         loanContract.closeLoan(borrower);
     }
+
+    function fetchLoan(address borrower) public view returns (Loan.LoanDetails memory) {
+        return loanContract.fetchLoan(borrower);
+    }
 }

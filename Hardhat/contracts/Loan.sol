@@ -55,4 +55,8 @@ contract Loan {
         loans[_borrower].balance = 0;
         emit LoanClosed(_borrower);
     }
+    
+    function fetchLoan(address borrower) public view returns (LoanDetails memory) {
+        return loans[borrower];
+    }
 }
