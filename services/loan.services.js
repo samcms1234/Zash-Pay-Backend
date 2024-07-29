@@ -1,18 +1,5 @@
-const { ethers } = require("ethers");
-const { default: Web3 } = require("web3");
-require('dotenv').config();
-
-const { abi } = require('../utils/ABI/MasterControl.json');
-const { contractAddress, ownerAddress, networkDeployedTo } = require('../utils/contracts-config.json');
-
-const web3 = new Web3("http://localhost:8545");
-
-const masterControl = new web3.eth.Contract(abi, contractAddress);
-
-function logWithTimestamp(message) {
-    const timestamp = new Date().toString();
-    console.log(`[${timestamp}] ${message}`);
-}
+const { masterControl } = require('../config/blockchain.config');
+const { logWithTimestamp } = require('../utils/logger')
 
 async function createLoan( borrower, amount, interestRate, duration) {
 
